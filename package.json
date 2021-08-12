@@ -1,0 +1,25 @@
+{
+  "name": "nosocialsql",
+  "version": "1.0.0",
+  "description": "## Description ` This application is build based on back end for a social network API that uses a NoSQL database so that the website can handle large amounts of unstructured data.  `",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonipoud/NosocialSQL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sonipoud/NosocialSQL/issues"
+  },
+  "homepage": "https://github.com/sonipoud/NosocialSQL#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.13.7"
+  }
+}
