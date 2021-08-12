@@ -33,7 +33,7 @@ const thoughtController = {
     },
 
     //POST new thought
-    // `/api/thoguhts`
+    // `/api/thoughts`
     createThought({ body }, res) {
         Thought.create(body)
             .then(dbThought => res.json(dbThought))
@@ -44,7 +44,7 @@ const thoughtController = {
     },
 
     //PUT update thought by _id
-    // `/api/thoguhts`
+    // `/api/thoughts`
     updateThought({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.id },
@@ -63,7 +63,7 @@ const thoughtController = {
     },
 
     //DELETE remove thought by _id
-    // `/api/thoguhts`
+    // `/api/thoughts`
     deleteThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.id })
             .then(dbThought => {
