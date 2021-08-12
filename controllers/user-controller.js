@@ -1,4 +1,4 @@
-const { User } = require("../models")
+const { User } = require('../models')
 
 const userController = {
     //GET all users
@@ -74,12 +74,25 @@ const userController = {
             .catch(err => {
                 res.json(err);
             });
+    },
+
+    addFriend({ params }, res) {
+        User.findByIdAndUpdate(params.userId, {$push: {friends: params.friendId}})
+        .then(dbUser => res.json(dbUser))
+            .catch(err => {
+                res.json(err);
+            });
+        
     }
+
+
+
 };
 
 // /api/users/:userId/friends/:friendId
 
 // POST to add a new friend to a user's friend list
+
 
 // DELETE to remove a friend from a user's friend list
 
