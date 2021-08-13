@@ -46,10 +46,7 @@ const thoughtController = {
     //PUT update thought by _id
     // `/api/thoughts`
     updateThought({ params, body }, res) {
-        Thought.findOneAndUpdate(
-            { _id: params.id },
-            { $push: { thoughts: _id } },
-            { new: true })
+        Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
             .then(dbThought => {
                 if (!dbThought) {
                     res.status(404).json({ message: 'No THOUGHT found with this id' });
@@ -76,16 +73,36 @@ const thoughtController = {
             .catch(err => {
                 res.json(err);
             });
+    },
+
+    // POST to create a reaction stored in a single thought's reactions array field
+    // /api/thoughts/:thoughtId/reactions
+    addReaction({ params, body }, res) {
+        Thought.findByIdAndUpdate(
+            { _id: params.thoughtId },
+            { $push: { reactions: body } },
+            { new: true }
+        )
+            .then(dbThought => res.json(dbThought))
+            .catch(err => {
+                res.json(err);
+            });
+    },
+
+    // DELETE to pull and remove a reaction by the reaction's reactionId value
+    // /api/thoughts/:thoughtId/reactions
+    removeReaction({ params, body }, res) {
+        Thought.findByIdAndDelete(
+            { _id: params.thoughtId },
+            { $pull: { reactions: body } },
+            { new: true }
+        )
+            .then(dbThought => res.json(dbThought))
+            .catch(err => {
+                res.json(err);
+            });
     }
 };
-
-// /api/thoughts/:thoughtId/reactions
-
-// POST to create a reaction stored in a single thought's reactions array field
-
-// DELETE to pull and remove a reaction by the reaction's reactionId value
-
-
 
 module.exports = thoughtController;
 

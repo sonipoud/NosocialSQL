@@ -16,8 +16,8 @@ const userController = {
     getUserById({ params }, res) {
         User.findOne({ _id: params.id })
             .populate({
-                path: 'thoughts',
-                path: 'friends',
+                path: 'thought',
+                path: 'friend',
                 select: '-__v'
             })
             .select('-__v')
@@ -76,24 +76,33 @@ const userController = {
             });
     },
 
+    // POST to add a new friend to a user's friend list
+    // /api/users/:userId/friends/:friendId
     addFriend({ params }, res) {
-        User.findByIdAndUpdate(params.userId, {$push: {friends: params.friendId}})
-        .then(dbUser => res.json(dbUser))
+        User.findByIdAndUpdate(
+            { _id: params.userId },
+            { $push: { friends: params.friendId } },
+            { new: true }
+        )
+            .then(dbUser => res.json(dbUser))
             .catch(err => {
                 res.json(err);
             });
-        
+    },
+
+    // DELETE to remove a friend from a user's friend list
+    // /api/users/:userId/friends/:friendId
+    removeFriend({ params }, res) {
+        User.findByIdAndDelete(
+            { _id: params.userId },
+            { $pull: { friends: params.friendId } },
+            { new: true }
+        )
+            .then(dbUser => res.json(dbUser))
+            .catch(err => {
+                res.json(err);
+            });
     }
-
-
-
 };
-
-// /api/users/:userId/friends/:friendId
-
-// POST to add a new friend to a user's friend list
-
-
-// DELETE to remove a friend from a user's friend list
 
 module.exports = userController;
