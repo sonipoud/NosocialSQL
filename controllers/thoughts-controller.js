@@ -5,6 +5,12 @@ const thoughtController = {
     // `/api/thoughts`
     getAllThoughts(req, res) {
         Thought.find({})
+            .populate({
+                path: 'user',
+                select: '-__v'
+            })
+            .select('-__v')
+            .sort({_id:-1})
             .then(dbThought => res.json(dbThought))
             .catch(err => {
                 res.json(err);
@@ -20,6 +26,7 @@ const thoughtController = {
                 select: '-__v'
             })
             .select('-__v')
+            .sort({_id:-1})
             .then(dbThought => {
                 if (!dbThought) {
                     res.status(404).json({ message: 'No THOUGHT found with this id' });
@@ -36,6 +43,13 @@ const thoughtController = {
     // `/api/thoughts`
     createThought({ body }, res) {
         Thought.create(body)
+            .then(({ _id }) => {
+                return User.findOneAndUpdate(
+                    { _id: body.userId },
+                    { $push: {thoughts: _id } },
+                    {new: true}
+                )
+            })
             .then(dbThought => res.json(dbThought))
             .catch(err => {
                 res.json(err);
@@ -94,7 +108,7 @@ const thoughtController = {
     removeReaction({ params, body }, res) {
         Thought.findByIdAndDelete(
             { _id: params.thoughtId },
-            { $pull: { reactions: body } },
+            { $pull: { reactions: { reactionId: params.reactionId } } },
             { new: true }
         )
             .then(dbThought => res.json(dbThought))
