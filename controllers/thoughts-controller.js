@@ -10,7 +10,7 @@ const thoughtController = {
                 select: '-__v'
             })
             .select('-__v')
-            .sort({_id:-1})
+            .sort({_id: -1})
             .then(dbThought => res.json(dbThought))
             .catch(err => {
                 res.json(err);
@@ -26,7 +26,7 @@ const thoughtController = {
                 select: '-__v'
             })
             .select('-__v')
-            .sort({_id:-1})
+            .sort({_id: -1})
             .then(dbThought => {
                 if (!dbThought) {
                     res.status(404).json({ message: 'No THOUGHT found with this id' });
@@ -40,14 +40,14 @@ const thoughtController = {
     },
 
     //POST new thought
-    // `/api/thoughts`
+    // `/api/thoughts/userId`
     createThought({ body }, res) {
         Thought.create(body)
             .then(({ _id }) => {
                 return User.findOneAndUpdate(
                     { _id: body.userId },
-                    { $push: {thoughts: _id } },
-                    {new: true}
+                    { $push: { thoughts: _id } },
+                    { new: true }
                 )
             })
             .then(dbThought => res.json(dbThought))
@@ -92,7 +92,7 @@ const thoughtController = {
     // POST to create a reaction stored in a single thought's reactions array field
     // /api/thoughts/:thoughtId/reactions
     addReaction({ params, body }, res) {
-        Thought.findByIdAndUpdate(
+        Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             { $push: { reactions: body } },
             { new: true }
@@ -106,9 +106,9 @@ const thoughtController = {
     // DELETE to pull and remove a reaction by the reaction's reactionId value
     // /api/thoughts/:thoughtId/reactions
     removeReaction({ params, body }, res) {
-        Thought.findByIdAndDelete(
+        Thought.findOneAndUpdate(
             { _id: params.thoughtId },
-            { $pull: { reactions: { reactionId: params.reactionId } } },
+            { $pull: { reactions: body } },
             { new: true }
         )
             .then(dbThought => res.json(dbThought))
