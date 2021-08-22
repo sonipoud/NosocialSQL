@@ -20,7 +20,7 @@ const thoughtController = {
     //GET a single thought by _id
     // `/api/thoughts`
     getThoughtById({ params }, res) {
-        Thought.findOne({ _id: params.id })
+        Thought.findOne({ _id: params.thoughtId })
             .populate({
                 path: 'user',
                 select: '-__v'
@@ -67,7 +67,7 @@ const thoughtController = {
     //PUT update thought by _id
     // `/api/thoughts`
     updateThought({ params, body }, res) {
-        Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
+        Thought.findOneAndUpdate({ _id: params.thoughtId }, body, { new: true })
             .then(dbThought => {
                 if (!dbThought) {
                     res.status(404).json({ message: 'No THOUGHT found with this id' });
