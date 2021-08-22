@@ -18,7 +18,11 @@ This application is build based on back end for a social network API that uses a
 
 
 ## Walkthrough Video
-[Click Here!]()
+[Click Here for part 1!](https://drive.google.com/file/d/157hVR6EINXnDBykjmwtyqchbxRk9ak3l/view)
+<br>
+
+[Click Here for part 2!](https://drive.google.com/file/d/1PKCG4_Oz-GQ53lhbZGWZBibIPBbXfibi/view)
+
 
 ---
 
