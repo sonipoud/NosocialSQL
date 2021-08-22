@@ -42,15 +42,22 @@ const thoughtController = {
     //POST new thought
     // `/api/thoughts/userId`
     createThought({ body }, res) {
+        console.log(body)
         Thought.create(body)
-            .then(({ _id }) => {
+            .then((dbThoughtData) => {
                 return User.findOneAndUpdate(
                     { _id: body.userId },
-                    { $push: { thoughts: _id } },
+                    { $push: { thoughts: dbThoughtData._id } },
                     { new: true }
                 )
             })
-            .then(dbThought => res.json(dbThought))
+            .then(dbUser => {
+                if (!dbUser) {
+                    res.status(404).json({ message: 'Thought created but no USER found with this id' });
+                    return;
+                }
+                res.json({message: 'thoughts successfully created'})
+            })
             .catch(err => {
                 res.json(err);
             });
@@ -76,13 +83,18 @@ const thoughtController = {
     //DELETE remove thought by _id
     // `/api/thoughts`
     deleteThought({ params }, res) {
-        Thought.findOneAndDelete({ _id: params.id })
+        Thought.findOneAndRemove({ _id: params.thoughtId })
             .then(dbThought => {
                 if (!dbThought) {
                     res.status(404).json({ message: 'No THOUGHT found with this id' });
                     return;
                 }
                 res.json(dbThought);
+                return User.findOneAndUpdate(
+                    { thoughts: params.thoughtId },
+                    { $pull: { thoughts: params.thoughtId } },
+                    { new: true }
+                )
             })
             .catch(err => {
                 res.json(err);

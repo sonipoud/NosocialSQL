@@ -4,7 +4,8 @@
   "description": "## Description ` This application is build based on back end for a social network API that uses a NoSQL database so that the website can handle large amounts of unstructured data.  `",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
